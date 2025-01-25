@@ -1,6 +1,6 @@
 {
     "name": "solarsystemplusplus",
-    "version": "0.0.3",
+    "version": "0.0.1",
     "title": "Solar System++",
     "author": "rjdunlap",
     "factorio_version": "2.0",
@@ -8,12 +8,15 @@
       "space-age",
       "any-planet-start >= 1.1.8",
       "PlanetsLib >= 1.0.8",
-      "planet-nekohaven >= 0.0.8",
-      "planet-mickora >= 0.0.4",
-      "planet-quadromire >= 0.0.4",
-      "planet-gerkizia >= 0.0.5",
-      "planet-froodara >= 0.0.10",
-      "planet-akularis >= 0.0.3"
+      "planet-akularis >= 0.1.0",
+      "planet-froodara >= 0.1.0",
+      "planet-gerkizia >= 0.1.0",
+      "planet-hexalith >= 0.1.0",
+      "planet-mickora >= 0.1.0",
+      "planet-nekohaven >= 0.1.0",
+      "planet-quadromire >= 0.1.0",
+      "planet-tapatrion >= 0.1.0",
+      "planet-tchekor >= 0.1.0"
 ],
-    "description": "This mod adds in a new starter planet Quadromire"
+    "description": "Solar System++ generates a random solar system that provides a means to reach solar system edge"
   }
