@@ -1,21 +1,30 @@
 local vanillaPlanets = {'nauvis', 'vulcanus', 'gleba', 'fulgora', 'aquilo'}
 local allPlanets = {'nauvis', 'vulcanus', 'gleba', 'fulgora', 'aquilo',
-                    'mickora', 'hexalith', 'quadromire',
-                    'froodara', 'tchekor',
+                    'mickora', 'hexalith', 'quadromire', 'vicrox',
+                    'froodara', 'tchekor', 'ithurice',
                     'nekohaven', 'tapatrion',
                     'hexalith',
                     'akularis', 'gerkizia',
                  }
 
-local nauvisOptions = { 'nauvis', 'mickora', 'hexalith', 'quadromire'}
+local nauvisOptions = { 'nauvis', 'mickora', 'hexalith', 'quadromire', 'vicrox'}
 local vulcanusOptions = { 'vulcanus', 'froodara', 'tchekor'}
 local glebaOptions = { 'gleba', 'nekohaven', 'tapatrion'}
-local fulgoraOptions = { 'fulgora', 'nekohaven', 'tchekor'}
-local aqulioOptions = { 'aquilo', 'tapatrion'}
+local fulgoraOptions = { 'fulgora', 'nekohaven', 'tchekor', 'ithurice', 'vicrox'}
+local aqulioOptions = { 'aquilo', 'tapatrion', 'ithurice'}
 local extraContentOptions =  {}
 local t3Options = {'hexalith'}
 local tZeroOptions = { 'akularis', 'gerkizia'}
 local selectedPlanets = {}
+local nonStartPlanet = { 'aquilo', 'hexalith'}
+
+local bigpack = require("__big-data-string2__.pack")
+local encode = tostring
+local function set_my_data(name, data)
+    return bigpack(name, encode(data))
+end
+
+local hideNauvis = true
 
 local function getRandomPlanet(options)
     return options[math.random(1, #options)]
@@ -28,7 +37,7 @@ local function hideConnections(planetName)
         if connection == nil then
             break
         end
-        log(serpent.block(planetName) .. " -> " .. serpent.block(connection.from) .. " " .. serpent.block(connection.to))
+        --log(serpent.block(planetName) .. " -> " .. serpent.block(connection.from) .. " " .. serpent.block(connection.to))
         if connection.from == planetName or connection.to == planetName then
             connection.hidden = true
             connection.from = planetName
@@ -61,7 +70,11 @@ local function hideOtherPlanets(options, selected)
     end
     
     for _, option in pairs(options) do
-            log(serpent.block(option))
+            if option == "nauvis" then
+                hideNauvis = false
+            end
+
+            --log(serpent.block(option))
             hideConnections(option)
 
             data.raw.planet[option].hidden = true
@@ -92,13 +105,37 @@ local function checkIfAnyContains(set, set2)
     return ""
 end
 
+local function selectStartPlanet(start, selectedPlanets)
+    --log(serpent.block(start))
+    if start ~= "" then
+        return start
+    end
+
+    while start == "" do
+        local index = math.random(1, #selectedPlanets)
+        
+        start = selectedPlanets[index]
+        
+        for _, option in pairs(nonStartPlanet) do
+            if option == start then
+                start = ""
+            end
+        end
+        
+        --log("selected start:" .. serpent.block(start))
+    end
+
+    return start
+end
 
 local function moveSpaceConnections(basePlanet, selected)
     if basePlanet == selected then
         return
     end
 
-    for _,connection in pairs (data.raw["space-connection"]) do 
+    for _,connection in pairs (data.raw["space-connection"]) do
+
+
         if connection == nil then
             break
         end
@@ -161,30 +198,43 @@ function HanaSystem(options, digit)
     local fixDigit = nthdigit(seed, digit)
 
     local planet = options[fixDigit % #options + 1]
-    log("digit: " .. fixDigit .. serpent.block(planet))
+    --log("digit: " .. fixDigit .. serpent.block(planet))
     return planet
 end
 
 function BuildSolarSystem()
-    -- feed seed
-    --preFeedRandomSeed()
+    local selectedNauvis
+    local selectedVulcanus
+    local selectedGleba
+    local selectedFulgora
+    local selectedAqulio
+    local selectedTZero
 
-    --local selectedNauvis = getRandomPlanet(nauvisOptions)
-    --local selectedVulcanus = getRandomPlanet(vulcanusOptions)
-    --local selectedGleba = getRandomPlanet(glebaOptions)
-    --local selectedFulgora = getRandomPlanet(fulgoraOptions)
-    --local selectedAqulio = getRandomPlanet(aqulioOptions)
-    --local selectedTZero = getRandomPlanet(tZeroOptions)
-    --local selectedExtraContent = getRandomPlanet(extraContentOptions)
 
-    local selectedTZero = HanaSystem(tZeroOptions, 1)
-    local selectedNauvis = HanaSystem(nauvisOptions, 2)
-    local selectedVulcanus = HanaSystem(vulcanusOptions, 3)
-    local selectedGleba = HanaSystem(glebaOptions, 4)
-    local selectedFulgora = HanaSystem(fulgoraOptions, 5)
-    local selectedAqulio = HanaSystem(aqulioOptions, 6)
-    --local selectedExtraContent = HanaSystem(extraContentOptions, 7)
+    if settings.startup["solar-system-random"].value then
+        preFeedRandomSeed()
 
+        selectedNauvis = getRandomPlanet(nauvisOptions)
+        selectedVulcanus = getRandomPlanet(vulcanusOptions)
+        selectedGleba = getRandomPlanet(glebaOptions)
+        selectedFulgora = getRandomPlanet(fulgoraOptions)
+        selectedAqulio = getRandomPlanet(aqulioOptions)
+        selectedTZero = getRandomPlanet(tZeroOptions)
+        --local selectedExtraContent = getRandomPlanet(extraContentOptions)
+    end
+
+    if settings.startup["solar-system-random"].value ~= true then
+
+        selectedTZero = HanaSystem(tZeroOptions, 1)
+        selectedNauvis = HanaSystem(nauvisOptions, 2)
+        selectedVulcanus = HanaSystem(vulcanusOptions, 3)
+        selectedGleba = HanaSystem(glebaOptions, 4)
+        selectedFulgora = HanaSystem(fulgoraOptions, 5)
+        selectedAqulio = HanaSystem(aqulioOptions, 6)
+        --local selectedExtraContent = HanaSystem(extraContentOptions, 7)
+    end
+
+    local startingPlanet = ""
 
     table.insert(selectedPlanets, selectedNauvis)
     moveSpaceConnections("nauvis", selectedNauvis)
@@ -192,7 +242,8 @@ function BuildSolarSystem()
     -- Use a T0 if Nauvis is a T3
     if checkIfSelectedInsideOptions(selectedNauvis, t3Options) then
         table.insert(selectedPlanets, selectedTZero)
-        --all T0 should already have a connection Nauvis?
+        
+        startingPlanet = selectedTZero
     else
         selectedTZero = ""
     end
@@ -200,7 +251,7 @@ function BuildSolarSystem()
     moveSpaceConnections("nauvis", selectedNauvis)
 
     local tmpVul = checkIfAnyContains(selectedPlanets, vulcanusOptions)
-    if tmpVul ~= "" then
+    if settings.startup["solar-system-random"].value and tmpVul ~= "" then
         selectedVulcanus = tmpVul
         moveSpaceConnections("vulcanus", selectedVulcanus)
     else
@@ -209,7 +260,7 @@ function BuildSolarSystem()
     end 
 
     local tmpGleba = checkIfAnyContains(selectedPlanets, glebaOptions)
-    if tmpGleba ~= "" then
+    if settings.startup["solar-system-random"].value and tmpGleba ~= "" then
         selectedGleba = tmpGleba
         moveSpaceConnections("gleba", selectedGleba)
     else
@@ -218,7 +269,7 @@ function BuildSolarSystem()
     end 
 
     local tmpFulgora = checkIfAnyContains(selectedPlanets, fulgoraOptions)
-    if tmpFulgora ~= "" then
+    if settings.startup["solar-system-random"].value and tmpFulgora ~= "" then
         selectedFulgora = tmpFulgora
         moveSpaceConnections("fulgora", selectedFulgora)
     else
@@ -227,18 +278,30 @@ function BuildSolarSystem()
     end
 
     local tmpAqulio = checkIfAnyContains(selectedPlanets, aqulioOptions)
-    if tmpAqulio ~= "" then
+    log("tmpAqulio " .. tmpAqulio)
+    log("selectedAqulio " .. selectedAqulio)
+    if settings.startup["solar-system-random"].value and tmpAqulio ~= "" then
         selectedAqulio = tmpAqulio
-        moveSpaceConnections("aqulio", selectedAqulio)
+        moveSpaceConnections("aquilo", selectedAqulio)
     else
         table.insert(selectedPlanets, selectedAqulio)
-        moveSpaceConnections("aqulio", selectedAqulio)
+        moveSpaceConnections("aquilo", selectedAqulio)
     end
+
+    startingPlanet = selectStartPlanet(startingPlanet, selectedPlanets)
+
+    if startingPlanet == 'nauvis' then
+        startingPlanet = "none"
+    end
+    --log(startingPlanet)
+    --log(serpent.block(startingPlanet))
+    data:extend{set_my_data("startingPlanet", startingPlanet)}
+    data:extend{set_my_data("hideNauvis", hideNauvis)}
 
     --log(serpent.block(selectedPlanets))
     hideOtherPlanets(allPlanets, selectedPlanets)
 
-    log(serpent.block(selectedPlanets))
+    --log(serpent.block(selectedPlanets))
 end
 
 BuildSolarSystem()

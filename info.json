@@ -6,17 +6,20 @@
     "factorio_version": "2.0",
     "dependencies": ["base >= 2.0.28",
       "space-age",
-      "any-planet-start >= 1.1.8",
-      "PlanetsLib >= 1.0.8",
+      "any-planet-start >= 1.1.12",
+      "PlanetsLib >= 1.1.36",
+      "big-data-string2",
       "planet-akularis >= 0.1.0",
       "planet-froodara >= 0.1.0",
       "planet-gerkizia >= 0.1.0",
       "planet-hexalith >= 0.1.0",
+      "planet-ithurice",
       "planet-mickora >= 0.1.0",
       "planet-nekohaven >= 0.1.0",
       "planet-quadromire >= 0.1.0",
       "planet-tapatrion >= 0.1.0",
-      "planet-tchekor >= 0.1.0"
+      "planet-tchekor >= 0.1.0",
+      "planet-vicrox"
 ],
     "description": "Solar System++ generates a random solar system that provides a means to reach solar system edge"
   }
