@@ -1,20 +1,20 @@
 local vanillaPlanets = {'nauvis', 'vulcanus', 'gleba', 'fulgora', 'aquilo'}
 local allPlanets = {'nauvis', 'vulcanus', 'gleba', 'fulgora', 'aquilo',
                     'mickora', 'hexalith', 'quadromire', 'vicrox',
-                    'froodara', 'tchekor', 'ithurice',
+                    'froodara', 'tchekor', 'ithurice', 'zzhora',
                     'nekohaven', 'tapatrion',
                     'hexalith',
                     'akularis', 'gerkizia',
                  }
-
+local tZeroOptions = { 'akularis', 'gerkizia'}
 local nauvisOptions = { 'nauvis', 'mickora', 'hexalith', 'quadromire', 'vicrox'}
-local vulcanusOptions = { 'vulcanus', 'froodara', 'tchekor'}
-local glebaOptions = { 'gleba', 'nekohaven', 'tapatrion'}
+local vulcanusOptions = { 'vulcanus', 'froodara', 'tchekor', 'zzhora'}
+local glebaOptions = { 'gleba', 'nekohaven', 'tapatrion', 'zzhora'}
 local fulgoraOptions = { 'fulgora', 'nekohaven', 'tchekor', 'ithurice', 'vicrox'}
 local aqulioOptions = { 'aquilo', 'tapatrion', 'ithurice'}
 local extraContentOptions =  {}
 local t3Options = {'hexalith'}
-local tZeroOptions = { 'akularis', 'gerkizia'}
+
 local selectedPlanets = {}
 local nonStartPlanet = { 'aquilo', 'hexalith'}
 

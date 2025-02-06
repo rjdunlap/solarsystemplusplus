@@ -1,6 +1,6 @@
 {
     "name": "solarsystemplusplus",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "title": "Solar System++",
     "author": "rjdunlap",
     "factorio_version": "2.0",
@@ -19,7 +19,8 @@
       "planet-quadromire >= 0.1.0",
       "planet-tapatrion >= 0.1.0",
       "planet-tchekor >= 0.1.0",
-      "planet-vicrox"
+      "planet-vicrox",
+      "planet-zzhora"
 ],
     "description": "Solar System++ generates a random solar system that provides a means to reach solar system edge"
   }
