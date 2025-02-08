@@ -1,3 +1,6 @@
+local utils = require("__any-planet-start__.utils")
+
+
 local vanillaPlanets = {'nauvis', 'vulcanus', 'gleba', 'fulgora', 'aquilo'}
 local allPlanets = {'nauvis', 'vulcanus', 'gleba', 'fulgora', 'aquilo',
                     'mickora', 'hexalith', 'quadromire', 'vicrox',
@@ -37,7 +40,6 @@ local function hideConnections(planetName)
         if connection == nil then
             break
         end
-        --log(serpent.block(planetName) .. " -> " .. serpent.block(connection.from) .. " " .. serpent.block(connection.to))
         if connection.from == planetName or connection.to == planetName then
             connection.hidden = true
             connection.from = planetName
@@ -48,13 +50,10 @@ end
 
 local function hideTechnology(techName)
     for _, tech in pairs (data.raw["technology"]) do
-        --log(serpent.block(techName) .. " -> " .. serpent.block(tech.name))
-
         if tech == nil or tech.name == nil or techName == nil then
             break
         end
         if string.find(tech.name, techName) then
-            --log("found")
             data.raw["technology"][tech.name].hidden = true
         end 
     end
@@ -74,7 +73,6 @@ local function hideOtherPlanets(options, selected)
                 hideNauvis = false
             end
 
-            --log(serpent.block(option))
             hideConnections(option)
 
             data.raw.planet[option].hidden = true
@@ -106,7 +104,6 @@ local function checkIfAnyContains(set, set2)
 end
 
 local function selectStartPlanet(start, selectedPlanets)
-    --log(serpent.block(start))
     if start ~= "" then
         return start
     end
@@ -120,9 +117,7 @@ local function selectStartPlanet(start, selectedPlanets)
             if option == start then
                 start = ""
             end
-        end
-        
-        --log("selected start:" .. serpent.block(start))
+        end 
     end
 
     return start
@@ -198,7 +193,6 @@ function HanaSystem(options, digit)
     local fixDigit = nthdigit(seed, digit)
 
     local planet = options[fixDigit % #options + 1]
-    --log("digit: " .. fixDigit .. serpent.block(planet))
     return planet
 end
 
@@ -209,7 +203,6 @@ function BuildSolarSystem()
     local selectedFulgora
     local selectedAqulio
     local selectedTZero
-
 
     if settings.startup["solar-system-random"].value then
         preFeedRandomSeed()
@@ -278,8 +271,6 @@ function BuildSolarSystem()
     end
 
     local tmpAqulio = checkIfAnyContains(selectedPlanets, aqulioOptions)
-    log("tmpAqulio " .. tmpAqulio)
-    log("selectedAqulio " .. selectedAqulio)
     if settings.startup["solar-system-random"].value and tmpAqulio ~= "" then
         selectedAqulio = tmpAqulio
         moveSpaceConnections("aquilo", selectedAqulio)
@@ -293,15 +284,51 @@ function BuildSolarSystem()
     if startingPlanet == 'nauvis' then
         startingPlanet = "none"
     end
-    --log(startingPlanet)
-    --log(serpent.block(startingPlanet))
+
     data:extend{set_my_data("startingPlanet", startingPlanet)}
     data:extend{set_my_data("hideNauvis", hideNauvis)}
 
-    --log(serpent.block(selectedPlanets))
-    hideOtherPlanets(allPlanets, selectedPlanets)
+    data:extend{{
+    type = "technology",
+    name = "planet-discovery-nauvis",
+    icons = util.technology_icon_constant_planet("__any-planet-start__/nauvis.png"),
+    icon_size = 256,
+    essential = true,
+    effects = {{
+        type = "unlock-space-location",
+        space_location = "nauvis",
+        use_icon_overlay_constant = true
+    }},
+    prerequisites = {"space-platform-thruster"},
+    unit = {
+        count = 1000,
+        ingredients = {
+            {"automation-science-pack", 1},
+            {"logistic-science-pack", 1},
+            {"chemical-science-pack", 1},
+            {"space-science-pack", 1}
+        },
+        time = 60
+    }
+    }}
 
-    --log(serpent.block(selectedPlanets))
+    -- Adjust any planet filepath 
+    for key, value in pairs(APS.planets) do
+        log(serpent.block(key))
+        if key == "gleba" or key == "vulcanus" or key == "fulgora" then
+            APS.planets[key].filename = "__any-planet-start__/" .. value.filename
+        end
+    end
+
+    -- load the planet start file
+    require(APS.planets[startingPlanet].filename)
+
+    local planet_technology = APS.planets[startingPlanet].technology
+    if planet_technology then
+        utils.remove_tech(planet_technology, true, false)
+    end
+
+    hideOtherPlanets(allPlanets, selectedPlanets)
 end
 
 BuildSolarSystem()
