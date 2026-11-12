@@ -1,7 +1,5 @@
-local bigunpack = require("__big-data-string2__.unpack")
-local decode = tostring
 local function get_my_data(name)
-    return decode(bigunpack(name))
+    return prototypes.mod_data["solarsystemplusplus-" .. name].data.value
 end
 
 script.on_init(function()

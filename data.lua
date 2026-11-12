@@ -21,10 +21,14 @@ local t3Options = {'hexalith'}
 local selectedPlanets = {}
 local nonStartPlanet = { 'aquilo', 'hexalith'}
 
-local bigpack = require("__big-data-string2__.pack")
-local encode = tostring
-local function set_my_data(name, data)
-    return bigpack(name, encode(data))
+-- Pass values from the data stage to control stage via a mod-data prototype
+-- (read at runtime through prototypes.mod_data). Replaces big-data-string2.
+local function set_my_data(name, value)
+    return {
+        type = "mod-data",
+        name = "solarsystemplusplus-" .. name,
+        data = { value = tostring(value) },
+    }
 end
 
 local hideNauvis = true
