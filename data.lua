@@ -79,8 +79,9 @@ local function hideOtherPlanets(options, selected)
 
             hideConnections(option)
 
+            -- Keep map_gen_settings intact: other mods (Cargo Ships, Enemy Race Manager, Factorissimo, ...)
+            -- read every planet's map_gen_settings and crash when it is nil. The planet is hidden anyway.
             data.raw.planet[option].hidden = true
-            data.raw.planet[option].map_gen_settings = nil
 
             --remove unlock tech
             hideTechnology(option)
@@ -324,12 +325,15 @@ function BuildSolarSystem()
         end
     end
 
-    -- load the planet start file
-    require(APS.planets[startingPlanet].filename)
+    -- load the planet start file (a Nauvis start has no entry in APS.planets)
+    local startPlanetData = APS.planets[startingPlanet]
+    if startPlanetData then
+        require(startPlanetData.filename)
 
-    local planet_technology = APS.planets[startingPlanet].technology
-    if planet_technology then
-        utils.remove_tech(planet_technology, true, false)
+        local planet_technology = startPlanetData.technology
+        if planet_technology then
+            utils.remove_tech(planet_technology, true, false)
+        end
     end
 
     hideOtherPlanets(allPlanets, selectedPlanets)

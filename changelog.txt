@@ -1,0 +1,12 @@
+---------------------------------------------------------------------------------------------------
+Version: 0.1.1
+Date: 2026-11-12
+  Bugfixes:
+    - Fixed a crash on load for seeds that start on Nauvis.
+    - Hidden planets keep their map generation settings, fixing crashes in mods that read every planet (Cargo Ships, Enemy Race Manager, Factorissimo).
+---------------------------------------------------------------------------------------------------
+Version: 0.1.0
+Date: 2026-11-12
+  Changes:
+    - Updated for Factorio 2.1.
+    - No longer depends on big-data-string2 (start planet is passed to the runtime through a mod-data prototype).
