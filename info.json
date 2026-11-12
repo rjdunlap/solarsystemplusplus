@@ -1,6 +1,6 @@
 {
     "name": "solarsystemplusplus",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "title": "Solar System++",
     "author": "rjdunlap",
     "factorio_version": "2.1",
@@ -12,12 +12,12 @@
       "planet-akularis >= 0.3.0",
       "planet-froodara >= 0.3.0",
       "planet-gerkizia >= 0.3.0",
-      "planet-hexalith >= 0.3.0",
+      "planet-hexalith >= 0.3.1",
       "planet-ithurice >= 0.2.0",
       "planet-mickora >= 0.3.0",
       "planet-nekohaven >= 0.3.0",
       "planet-quadromire >= 0.3.0",
-      "planet-tapatrion >= 0.3.0",
+      "planet-tapatrion >= 0.3.1",
       "planet-tchekor >= 0.3.0",
       "planet-vicrox >= 0.2.0",
       "planet-zzhora >= 0.3.0"
